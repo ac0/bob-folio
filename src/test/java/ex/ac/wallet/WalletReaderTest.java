@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class WalletReaderTest {
 
@@ -27,11 +27,48 @@ public class WalletReaderTest {
 
     @Test
     public void getEntriesCodeWithASpace() {
+        // reader by passing explicit pattern param to support this existing test
+        WalletReader walletReader = new WalletReaderImpl("(.*)=(.*)");
+
         Iterator<WalletEntry> entries = walletReader.getEntries(
                 toInputStream("a bc=9\nend=8.09"));
 
         assertEquals(true, entries.hasNext());
         assertEquals("a bc", entries.next().getCurrencyCode());
+    }
+
+    @Test
+    public void getEntriesTolerateExtraOrTrailingSpace() {
+        Iterator<WalletEntry> entries = walletReader.getEntries(
+                toInputStream("around = 9%n beginning=8.09%ntrailing=9.88 "));
+
+        WalletEntry lastEntry = null;
+        while (entries.hasNext()) {
+            lastEntry = entries.next();// main test - implied with a non-throw
+        }
+
+        assertNotNull(lastEntry);
+        assertEquals(new BigDecimal("9.88"), lastEntry.getAmount());
+    }
+
+    @Test(expected = InvalidWalletEntryException.class)
+    public void getEntriesOnBadCurrencyCodeThrowInvalidEntryException() {
+        Iterator<WalletEntry> entries = walletReader.getEntries(
+                toInputStream("sbd-ddf=9.88"));
+
+        while (entries.hasNext()) {
+            entries.next();
+        }
+    }
+
+    @Test(expected = InvalidWalletEntryException.class)
+    public void getEntriesOnBadFormattedAmountThrowInvalidEntryException() {
+        Iterator<WalletEntry> entries = walletReader.getEntries(
+                toInputStream("adb=9.8-8"));
+
+        while (entries.hasNext()) {
+            entries.next();
+        }
     }
 
     private InputStream toInputStream(String formatString, Object... args) {
