@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
@@ -14,23 +15,23 @@ public class WalletReaderTest {
     WalletReader walletReader = new WalletReaderImpl();
 
     @Test
-    public void getLinesSingleWordLines() {
-        Iterator<String> lines = walletReader.getLines(
-                toInputStream("abc%ndef"));
+    public void getEntriesCodesNoSpaces() {
+        Iterator<WalletEntry> entries = walletReader.getEntries(
+                toInputStream("abc=9.8%ndef=7.3"));
 
-        assertEquals(true, lines.hasNext());
-        assertEquals("abc", lines.next());
-        assertEquals("def", lines.next());
-        assertEquals(false, lines.hasNext());
+        assertEquals(true, entries.hasNext());
+        assertEquals(new BigDecimal("9.8"), entries.next().getAmount());
+        assertEquals("def", entries.next().getCurrencyCode());
+        assertEquals(false, entries.hasNext());
     }
 
     @Test
-    public void getLinesMultiWord() throws UnsupportedEncodingException {
-        Iterator<String> lines = walletReader.getLines(
-                toInputStream("a bc%nend"));
+    public void getEntriesCodeWithASpace() {
+        Iterator<WalletEntry> entries = walletReader.getEntries(
+                toInputStream("a bc=9\nend=8.09"));
 
-        assertEquals(true, lines.hasNext());
-        assertEquals("a bc", lines.next());
+        assertEquals(true, entries.hasNext());
+        assertEquals("a bc", entries.next().getCurrencyCode());
     }
 
     private InputStream toInputStream(String formatString, Object... args) {
