@@ -1,4 +1,4 @@
-package ex.ac;
+package ex.ac.wallet;
 
 import org.junit.Test;
 
@@ -9,13 +9,13 @@ import java.util.Iterator;
 
 import static org.junit.Assert.assertEquals;
 
-public class LineScannerTest {
+public class WalletReaderTest {
 
-    LineScanner lineScanner = new LineScannerImpl();
+    WalletReader walletReader = new WalletReaderImpl();
 
     @Test
     public void getLinesSingleWordLines() {
-        Iterator<String> lines = lineScanner.getLines(
+        Iterator<String> lines = walletReader.getLines(
                 toInputStream("abc%ndef"));
 
         assertEquals(true, lines.hasNext());
@@ -26,7 +26,7 @@ public class LineScannerTest {
 
     @Test
     public void getLinesMultiWord() throws UnsupportedEncodingException {
-        Iterator<String> lines = lineScanner.getLines(
+        Iterator<String> lines = walletReader.getLines(
                 toInputStream("a bc%nend"));
 
         assertEquals(true, lines.hasNext());

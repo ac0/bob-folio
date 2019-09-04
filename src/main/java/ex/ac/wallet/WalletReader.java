@@ -1,9 +1,9 @@
-package ex.ac;
+package ex.ac.wallet;
 
 import java.io.InputStream;
 import java.util.Iterator;
 
-public interface LineScanner {
+public interface WalletReader {
     Iterator<String> getLines(InputStream fis);
 
 }
