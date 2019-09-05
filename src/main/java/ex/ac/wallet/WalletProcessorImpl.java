@@ -1,6 +1,7 @@
 package ex.ac.wallet;
 
 import ex.ac.PortfolioLogger;
+import ex.ac.conversion.ValueAssessor;
 
 import java.math.BigDecimal;
 import java.util.Iterator;

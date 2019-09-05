@@ -1,5 +1,8 @@
 package ex.ac;
 
+import ex.ac.conversion.ConvertingValueAssessor;
+import ex.ac.conversion.CryptoCompareExchangeAdaptor;
+import ex.ac.conversion.ValueAssessor;
 import ex.ac.wallet.*;
 
 import java.io.BufferedInputStream;
@@ -24,7 +27,10 @@ public class Portfolio {
         WalletProcessor walletProcessor = new WalletProcessorImpl();
         PortfolioLogger portfolioLogger = new ConsolePortfolioLogger();
 
-        BigDecimal total = walletProcessor.valueOf(walletEntries, WalletEntry::getAmount, portfolioLogger);
-        portfolioLogger.logSummary(total, "RAW");
+        ValueAssessor baseEuroValueAssessor=new ConvertingValueAssessor("EUR",
+                new CryptoCompareExchangeAdaptor());
+
+        BigDecimal total = walletProcessor.valueOf(walletEntries, baseEuroValueAssessor, portfolioLogger);
+        portfolioLogger.logSummary(total, "EUR");
     }
 }
