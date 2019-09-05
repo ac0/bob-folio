@@ -1,3 +1,9 @@
+##### NOTE: Junit 4.8.2 jar dependency
+_As the zip has to go through gmail servers and they block jars, the dependency
+cannot be shipped in the jar. So it needs to be either downloaded explicitly or
+alternatively it gets automatically copied down by building just once using the 
+pom. See Project Structure section_
+
 ### Requirement Increments
 The assignment was implemented by incorporating-in the following
 incremental requirements
@@ -19,9 +25,9 @@ The git repository accompanying the project is important. The above requirements
  commits of a single requirement. Otherwise code comments were normally added only
  to highlight anything.
 
-### Project Structure and execution
+### Project Structure and Execution
 A pom.xml has been included but please note that **there is NO maven dependency** itself.
- even if a pom.xml has been provided. It was added to constraint the dependencies(to just junit)
+ even if a pom.xml has been provided. It was added to declare and limit the dependencies(to just junit)
  and the lang versions. Then the plugins were configured to copy down the junit to under the
  project root - *target/libs/junit-4.8.2.jar*.
 
