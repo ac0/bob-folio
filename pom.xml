@@ -48,8 +48,8 @@
               <addClasspath>true</addClasspath>
               <classpathPrefix>libs/</classpathPrefix>
               <mainClass>
-                    ex.ac.Portfolio
-                </mainClass>
+                  ex.ac.PortfolioApp
+              </mainClass>
             </manifest>
           </archive>
         </configuration>

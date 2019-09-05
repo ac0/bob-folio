@@ -2,6 +2,7 @@ package ex.ac;
 
 import ex.ac.wallet.WalletEntry;
 
+import java.io.PrintStream;
 import java.math.BigDecimal;
 
 /**
@@ -12,15 +13,21 @@ public class ConsolePortfolioLogger implements PortfolioLogger {
 
     private int count;
 
+    private final PrintStream out;
+
+    public ConsolePortfolioLogger(PrintStream out) {
+        this.out = out;
+    }
+
     @Override
     public void logEntry(WalletEntry walletEntry, BigDecimal entryValue) {
-        System.out.printf("%4d. %20s = %-10s%n", ++count, walletEntry, entryValue);
+        out.printf("%4d. %20s = %-10s%n", ++count, walletEntry, entryValue);
     }
 
     @Override
     public void logSummary(BigDecimal totalValue, String valueCode) {
         String valueCodeSuffix = valueCode == null ? "" : "(" + valueCode + ")";
-        System.out.println("-----------------------------------");
-        System.out.printf("%26s = %-10s%n%n", "Total" + valueCodeSuffix, totalValue);
+        out.println("-----------------------------------");
+        out.printf("%26s = %-10s%n%n", "Total" + valueCodeSuffix, totalValue);
     }
 }

@@ -71,7 +71,7 @@ public class WalletReaderTest {
         }
     }
 
-    private InputStream toInputStream(String formatString, Object... args) {
+    public static InputStream toInputStream(String formatString, Object... args) {
         try {
             return new ByteArrayInputStream(
                     String.format(formatString, args).getBytes("UTF-8"));
