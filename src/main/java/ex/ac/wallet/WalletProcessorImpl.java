@@ -7,13 +7,19 @@ import java.util.Iterator;
 
 public class WalletProcessorImpl implements WalletProcessor {
     @Override
-    public void process(Iterator<WalletEntry> walletEntries, ValueAssessor valueAssessor, PortfolioLogger portfolioLogger) {
+    public BigDecimal valueOf(Iterator<WalletEntry> walletEntries,
+                              ValueAssessor valueAssessor, PortfolioLogger portfolioLogger) {
+        BigDecimal totalValue = BigDecimal.ZERO;
+
         while (walletEntries.hasNext()) {
             WalletEntry walletEntry = walletEntries.next();
             BigDecimal entryValue = valueAssessor.valueOf(walletEntry);
+            totalValue = totalValue.add(entryValue);
 
-            portfolioLogger.log(walletEntry, entryValue);
+            portfolioLogger.logEntry(walletEntry, entryValue);
         }
+
+        return totalValue;
     }
 
 }

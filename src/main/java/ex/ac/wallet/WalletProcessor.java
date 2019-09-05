@@ -2,6 +2,7 @@ package ex.ac.wallet;
 
 import ex.ac.PortfolioLogger;
 
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 /**
@@ -9,5 +10,6 @@ import java.util.Iterator;
  * include processing method(s) of the singlular wallet entries too
  */
 public interface WalletProcessor {
-    void process(Iterator<WalletEntry> walletEntries, ValueAssessor valueAssessor, PortfolioLogger portfolioLogger);
+    BigDecimal valueOf(Iterator<WalletEntry> walletEntries,
+                       ValueAssessor valueAssessor, PortfolioLogger portfolioLogger);
 }

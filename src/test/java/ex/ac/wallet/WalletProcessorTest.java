@@ -21,9 +21,9 @@ public class WalletProcessorTest {
         WalletEntry record = new WalletEntry("abc", "34.2");
 
         AtomicBoolean wasItemProcessed = new AtomicBoolean(false);
-        walletProcessor.process(Collections.singleton(record).iterator(), WalletEntry::getAmount, new PortfolioLogger() {
+        walletProcessor.valueOf(Collections.singleton(record).iterator(), WalletEntry::getAmount, new PortfolioMockLogger() {
             @Override
-            public void log(WalletEntry walletEntry, BigDecimal entryValue) {
+            public void logEntry(WalletEntry walletEntry, BigDecimal entryValue) {
                 assertEquals(record, walletEntry);
                 wasItemProcessed.set(true);
             }
@@ -39,14 +39,41 @@ public class WalletProcessorTest {
         WalletEntrys.add(new WalletEntry("bc", "0.4"));
 
         AtomicInteger printCounter = new AtomicInteger(0);
-        walletProcessor.process(WalletEntrys.iterator(), WalletEntry::getAmount, new PortfolioLogger() {
+        walletProcessor.valueOf(WalletEntrys.iterator(), WalletEntry::getAmount, new PortfolioMockLogger() {
             @Override
-            public void log(WalletEntry walletEntry, BigDecimal entryValue) {
+            public void logEntry(WalletEntry walletEntry, BigDecimal entryValue) {
                 printCounter.incrementAndGet();
             }
 
         });
 
         assertEquals(WalletEntrys.size(), printCounter.get());
+    }
+
+    private static class PortfolioMockLogger implements PortfolioLogger {
+        @Override
+        public void logEntry(WalletEntry walletEntry, BigDecimal entryValue) {
+        }
+
+        @Override
+        public void logSummary(BigDecimal totalValue, String valueCode) {
+
+        }
+    }
+
+    @Test
+    public void testTotalling() {
+        List<WalletEntry> walletEntries = new ArrayList<>();
+        walletEntries.add(new WalletEntry("ab", "2.98"));
+        walletEntries.add(new WalletEntry("bc", "17.3"));
+        walletEntries.add(new WalletEntry("def", "-0.4"));
+        BigDecimal expectedTotal = walletEntries.stream()
+                .map(WalletEntry::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal actualTotal = walletProcessor.valueOf(walletEntries.iterator(),
+                WalletEntry::getAmount, new PortfolioMockLogger());
+
+        assertEquals(expectedTotal, actualTotal);
     }
 }

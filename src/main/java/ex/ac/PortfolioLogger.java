@@ -8,5 +8,7 @@ import java.math.BigDecimal;
  * Control portfolio logger interface; especially for tests
  */
 public interface PortfolioLogger {
-    void log(WalletEntry walletEntry, BigDecimal entryValue);
+    void logEntry(WalletEntry walletEntry, BigDecimal entryValue);
+
+    void logSummary(BigDecimal totalValue, String valueCode);
 }

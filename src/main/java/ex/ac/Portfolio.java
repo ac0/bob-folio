@@ -3,6 +3,7 @@ package ex.ac;
 import ex.ac.wallet.*;
 
 import java.io.BufferedInputStream;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 /**
@@ -23,6 +24,7 @@ public class Portfolio {
         WalletProcessor walletProcessor = new WalletProcessorImpl();
         PortfolioLogger portfolioLogger = new ConsolePortfolioLogger();
 
-        walletProcessor.process(walletEntries, WalletEntry::getAmount, portfolioLogger);
+        BigDecimal total = walletProcessor.valueOf(walletEntries, WalletEntry::getAmount, portfolioLogger);
+        portfolioLogger.logSummary(total, "RAW");
     }
 }
