@@ -1,5 +1,6 @@
 package ex.ac.wallet;
 
+import ex.ac.PortfolioEntryException;
 import ex.ac.PortfolioLogger;
 import org.junit.Test;
 
@@ -57,6 +58,11 @@ public class WalletProcessorTest {
 
         @Override
         public void logSummary(BigDecimal totalValue, String valueCode) {
+
+        }
+
+        @Override
+        public void logErrorEntry(PortfolioEntryException entryError, boolean summarisedAbort) {
 
         }
     }

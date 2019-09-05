@@ -26,6 +26,6 @@ public class WalletEntry {
 
     @Override
     public String toString() {
-        return String.format("%7s * %-10s", currencyCode, amount);
+        return String.format("%7s * %-16s", currencyCode, amount);
     }
 }

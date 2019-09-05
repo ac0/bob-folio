@@ -5,8 +5,8 @@ package ex.ac;
  *
  * Note - it's currently kept unchecked mainly owing to our reuse of an existing general interface (Iterator)
  */
-public class PortfolioException extends RuntimeException {
-    public PortfolioException(String message) {
+public class PortfolioEntryException extends RuntimeException {
+    public PortfolioEntryException(String message) {
         super(message);
     }
 }

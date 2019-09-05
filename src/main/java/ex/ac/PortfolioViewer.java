@@ -7,5 +7,5 @@ import java.io.InputStream;
  * level input stream, parsed, processed and output to a higher level logger, potentially stream
  */
 public interface PortfolioViewer {
-    void printPortfolio(InputStream portfolioSource, PortfolioLogger portfolioLogger);
+    boolean printPortfolio(InputStream portfolioSource, PortfolioLogger portfolioLogger);
 }

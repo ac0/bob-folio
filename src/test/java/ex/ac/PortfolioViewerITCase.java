@@ -3,9 +3,9 @@ package ex.ac;
 import ex.ac.wallet.WalletReaderTest;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public class PortfolioViewerITCase {
 
     @Test
-    public void printPortFolioWithMockedCurrencyExchange() throws FileNotFoundException {
+    public void printPortfolioWithMockedCurrencyExchange() {
         // user input
         InputStream sourceStream = WalletReaderTest.toInputStream(
                 "BTX=10%n"
@@ -53,5 +53,30 @@ public class PortfolioViewerITCase {
 
         assertNotNull(actualTotal.get());
         assertEquals(expectedTotal, actualTotal.get());
+    }
+
+    @Test
+    public void printPortfolioOnErrorInputLogBadRecordAtPosition() {
+        // user input
+        InputStream sourceStream = WalletReaderTest.toInputStream(
+                "BT X=10%n"
+                        + "ETN=5");
+
+        // dummy exchange
+        PortfolioViewer portfolioViewer = new PortfolioApp((fromSym, toSym) -> BigDecimal.ONE);
+
+        // capture
+        AtomicBoolean wasErrorLogged = new AtomicBoolean(false);
+        PortfolioLogger portfolioLogger = new ConsolePortfolioLogger(System.out) {
+            @Override
+            public void logErrorEntry(PortfolioEntryException entryError, boolean summarisedAbort) {
+                wasErrorLogged.set(true);
+            }
+        };
+
+        boolean success = portfolioViewer.printPortfolio(sourceStream, portfolioLogger);
+
+        assertFalse(success);
+        assertTrue("Error not passed to the logger", wasErrorLogged.get());
     }
 }

@@ -41,7 +41,7 @@ public class CryptoCompareExchangeAdaptor implements CurrencyExchange {
 
         // identify the one case that is non system related
         if (exchangeResponse.contains("Thereisnodataforthesymbol" + fromSym)) {
-            throw new UnknownSymbolException(fromSym);
+            throw new UnknownSymbolException("Unknown symbol: " + fromSym);
         }
 
         // rest is as good as system. includes format change

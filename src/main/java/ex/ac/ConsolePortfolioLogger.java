@@ -21,13 +21,25 @@ public class ConsolePortfolioLogger implements PortfolioLogger {
 
     @Override
     public void logEntry(WalletEntry walletEntry, BigDecimal entryValue) {
-        out.printf("%4d. %20s = %-10s%n", ++count, walletEntry, entryValue);
+        out.printf("%4d. %26s = %-16s%n", ++count, walletEntry, entryValue);
     }
 
     @Override
     public void logSummary(BigDecimal totalValue, String valueCode) {
         String valueCodeSuffix = valueCode == null ? "" : "(" + valueCode + ")";
-        out.println("-----------------------------------");
-        out.printf("%26s = %-10s%n%n", "Total" + valueCodeSuffix, totalValue);
+        summarise(
+                String.format("%32s = %-16s%n", "Total" + valueCodeSuffix, totalValue));
+    }
+
+    private void summarise(String summary) {
+        out.println("-------------------------------------------------");
+        out.println(summary);
+    }
+
+    @Override
+    public void logErrorEntry(PortfolioEntryException entryError, boolean summarisedAbort) {
+        out.printf("%4d.     ERROR!   %25s%n", ++count, entryError.getMessage());
+        summarise(
+                String.format("%31s%n", "Aborted"));
     }
 }

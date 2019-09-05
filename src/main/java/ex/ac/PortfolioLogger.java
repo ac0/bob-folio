@@ -11,4 +11,6 @@ public interface PortfolioLogger {
     void logEntry(WalletEntry walletEntry, BigDecimal entryValue);
 
     void logSummary(BigDecimal totalValue, String valueCode);
+
+    void logErrorEntry(PortfolioEntryException entryError, boolean summarisedAbort);
 }

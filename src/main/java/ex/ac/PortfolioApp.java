@@ -35,7 +35,7 @@ public class PortfolioApp implements PortfolioViewer {
     }
 
     @Override
-    public void printPortfolio(InputStream portfolioSource, PortfolioLogger portfolioLogger) {
+    public boolean printPortfolio(InputStream portfolioSource, PortfolioLogger portfolioLogger) {
         WalletReader walletReader = new WalletReaderImpl();
         Iterator<WalletEntry> walletEntries = walletReader.getEntries(new BufferedInputStream(portfolioSource));
 
@@ -44,8 +44,16 @@ public class PortfolioApp implements PortfolioViewer {
         ValueAssessor baseEuroValueAssessor = new ConvertingValueAssessor("EUR",
                 currencyExchange);
 
-        BigDecimal total = walletProcessor.valueOf(walletEntries, baseEuroValueAssessor, portfolioLogger);
+        BigDecimal total = null;
+        try {
+            total = walletProcessor.valueOf(walletEntries, baseEuroValueAssessor, portfolioLogger);
+        } catch (PortfolioEntryException entryError) {
+            portfolioLogger.logErrorEntry(entryError, true);
+            return false;
+        }
+
         portfolioLogger.logSummary(total, "EUR");
+        return true;
     }
 
     /**
