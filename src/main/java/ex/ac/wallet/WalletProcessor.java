@@ -9,5 +9,5 @@ import java.util.Iterator;
  * include processing method(s) of the singlular wallet entries too
  */
 public interface WalletProcessor {
-    void process(Iterator<WalletEntry> walletEntries, PortfolioLogger portfolioLogger);
+    void process(Iterator<WalletEntry> walletEntries, ValueAssessor valueAssessor, PortfolioLogger portfolioLogger);
 }

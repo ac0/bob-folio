@@ -3,6 +3,7 @@ package ex.ac.wallet;
 import ex.ac.PortfolioLogger;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,9 +21,9 @@ public class WalletProcessorTest {
         WalletEntry record = new WalletEntry("abc", "34.2");
 
         AtomicBoolean wasItemProcessed = new AtomicBoolean(false);
-        walletProcessor.process(Collections.singleton(record).iterator(), new PortfolioLogger() {
+        walletProcessor.process(Collections.singleton(record).iterator(), WalletEntry::getAmount, new PortfolioLogger() {
             @Override
-            public void log(WalletEntry walletEntry) {
+            public void log(WalletEntry walletEntry, BigDecimal entryValue) {
                 assertEquals(record, walletEntry);
                 wasItemProcessed.set(true);
             }
@@ -38,9 +39,9 @@ public class WalletProcessorTest {
         WalletEntrys.add(new WalletEntry("bc", "0.4"));
 
         AtomicInteger printCounter = new AtomicInteger(0);
-        walletProcessor.process(WalletEntrys.iterator(), new PortfolioLogger() {
+        walletProcessor.process(WalletEntrys.iterator(), WalletEntry::getAmount, new PortfolioLogger() {
             @Override
-            public void log(WalletEntry walletEntry) {
+            public void log(WalletEntry walletEntry, BigDecimal entryValue) {
                 printCounter.incrementAndGet();
             }
 

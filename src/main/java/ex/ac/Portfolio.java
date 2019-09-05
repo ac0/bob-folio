@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 /**
  * Driver of the portfolio printing application.
- *
+ * <p>
  * Just performs very basic wiring of components and handles user's selection of input etc
  */
 public class Portfolio {
@@ -23,6 +23,6 @@ public class Portfolio {
         WalletProcessor walletProcessor = new WalletProcessorImpl();
         PortfolioLogger portfolioLogger = new ConsolePortfolioLogger();
 
-        walletProcessor.process(walletEntries, portfolioLogger);
+        walletProcessor.process(walletEntries, WalletEntry::getAmount, portfolioLogger);
     }
 }
